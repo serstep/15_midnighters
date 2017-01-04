@@ -4,7 +4,7 @@ This script provides you to get names of users who sent their tasks solutions fr
 
 ##Using 
 
-    python3 seek_dev_nighters.py
+    $python3 seek_dev_nighters.py
 
 # Project Goals
 
