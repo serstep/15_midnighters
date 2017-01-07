@@ -11,19 +11,16 @@ def load_data_from_api(page_num):
     return response.json()
 
 
-def get_number_of_pages():
-    page_data = load_data_from_api(1)
-    return page_data['number_of_pages']
-
-
 def load_attempts():
-    pages = get_number_of_pages()
+    first_page = load_data_from_api(1)
+    pages = first_page["number_of_pages"]
+    attempts = first_page["records"]
 
-    for page in range(1, pages + 1):
+    for page in range(2, pages + 1):
         records = load_data_from_api(page)["records"]
+        attempts.extend(records)
 
-        for attempt in records:
-            yield attempt
+    return attempts
 
 
 def is_nighter(attempt):
@@ -38,15 +35,9 @@ def is_nighter(attempt):
 
 
 def get_nighters():
-    nighters = set()
-
-    for attempt in load_attempts():
-        if is_nighter(attempt):
-            nighters.add(attempt["username"])
-
-    return nighters
+    return set([attempt["username"] for attempt in load_attempts() if is_nighter(attempt)])
 
 
 if __name__ == '__main__':
-  for nighter in get_nighters():
-    print(nighter)
+    for nighter in get_nighters():
+        print(nighter)
